@@ -1,9 +1,17 @@
 import { ensureStateMetadata } from './internals';
 
-export interface ApiRequestInfo {
+export type ApiMethod =
+    | 'GET'
+    | 'CREATE'
+    | 'PUT'
+    | 'DELETE';
+
+export interface ApiResponsetInfo {
+    path?: string;
+    method?: ApiMethod;
 }
 
-export function ApiRequest(options?: ApiRequestInfo) {
+export function ApiResponse(options: ApiResponsetInfo) {
     return function(target: any, name: string, descriptor: TypedPropertyDescriptor<any>) {
         const meta = ensureStateMetadata(target.constructor);
 
