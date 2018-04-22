@@ -9,7 +9,7 @@ var projects = [
 ];
 
 router.get('/', function (req, res) {
-    return projects;
+    return res.send(projects);
 });
 
 module.exports = router;

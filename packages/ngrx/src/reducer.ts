@@ -2,8 +2,7 @@ import { Action } from '@ngrx/store';
 import { map, catchError } from 'rxjs/operators';
 import { of } from 'rxjs/observable/of';
 
-import { NGRA_STATE_META, StateMetdata } from './internals';
-import { RestApiService } from './rest';
+import { NGRA_STATE_META, StateMetdata, generateUrl } from './internals';
 import { NgrxSelect } from './select';
 
 export function createReducer<TState = any>(
@@ -28,16 +27,21 @@ export function createReducer<TState = any>(
     let result;
     // Handle the request reducer
     if (requestMeta) {
-        result = requestMeta.handler(state, action);
+        result = requestMeta.handler(state, action, adapter);
 
         // Make the request if necessary
-        if (requestMeta.request) {
-          RestApiService.execute(requestMeta.request, route, action.payload).pipe(
-            map((data: any) => {
-              return of(<any>{ type: `[${name}] ${requestMeta.name} success`, payload: data });
+        if (requestMeta.handler) {
+          const requestHandler = requestMeta.request || klass[requestMeta.info.method.toLowerCase()].request.fn;
+          const path = generateUrl(name, requestMeta.info, route);
+          const info = requestMeta.info;
+          const data = action.payload;
+
+          requestHandler({ info, path, data }).pipe(
+            map((response: any) => {
+              return <any>{ type: `[${name}] ${requestMeta.name} success`, payload: response };
             }),
-            catchError((data: any) => {
-              return of (<any>{ type: `[${name}] ${requestMeta.name} failure`, payload: { error: data } });
+            catchError((response: any) => {
+              return of (<any>{ type: `[${name}] ${requestMeta.name} failure`, payload: response });
             })
           ).subscribe(NgrxSelect.store);
         }

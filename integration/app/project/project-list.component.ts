@@ -20,6 +20,8 @@ export class ProjectComponent implements OnInit {
         this.projects$ = this.projectService.entities$;
 
         this.projectService.query();
+
+        this.projectService.publish('test',  { id: '3', name: 'test' });
     }
 
     ngOnInit() { }

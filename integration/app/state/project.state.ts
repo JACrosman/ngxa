@@ -12,17 +12,17 @@ export interface ProjectState extends ApiEntityState<Project> {
 
 @ApiState<ProjectState>({
     name: 'project',
-    route: '/project',
+    route: 'http://localhost:3000/api/project',
     defaults: {
         isPublishing: false
     }
 })
 export class ProjectApiState {
-    @ApiRequest({ path: '/publish/:name', method: 'PUT' })
+    @ApiRequest({ name: 'project', path: '/publish/:name', method: 'PUT' })
     publish() {
         return {
             start: (state: ProjectState) => {
-                return { ...state, isLoading: true };
+                return { ...state, isPublishing: true };
             },
             success: (state: ProjectState, result: any) => {
                 return { ...state, isPublished: true, isPublishing: false };

@@ -1,4 +1,6 @@
-export interface ApiEntityState<T> {
+import { EntityState } from '@ngrx/entity';
+
+export interface ApiEntityState<T> extends EntityState<T> {
     collection?: T[];
     entityId?: string;
     loading?: boolean;
@@ -8,7 +10,7 @@ export interface ApiEntityState<T> {
 export interface ApiOptions<T> {
     name: string;
     route: string;
-    defaults: T;
+    defaults: Partial<T>;
 }
 
 export type ApiMethod =
@@ -18,7 +20,14 @@ export type ApiMethod =
 | 'DELETE';
 
 export interface ApiRequestInfo {
+    name?: string;
     path?: string;
     method?: string;
     options?: any;
+}
+
+export interface ApiRequestHandler {
+    path?: string;
+    info?: ApiRequestInfo;
+    data: any;
 }

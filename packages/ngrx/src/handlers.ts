@@ -1,23 +1,48 @@
+import { Observable } from 'rxjs/Observable';
+import { catchError } from 'rxjs/operators';
+import { pipe } from 'rxjs/util/pipe';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { EntityAdapter } from "@ngrx/entity";
+
+import { ApiRequestHandler } from './symbols';
+import { NgrxSelect } from './select';
+
+function responseHandler(req: ApiRequestHandler) {
+   return pipe(
+        catchError((err: any) => {
+            return new ErrorObservable(req);
+        })
+    );
+}
+
 export const query = {
     request: {
         path: '',
         method: 'GET',
+        fn: (info: ApiRequestHandler): Observable<any> => {
+            const res = responseHandler(info);
+            return NgrxSelect.httpClient.get(info.path).pipe(res);
+        }
     },
     handler: function() {
         return {
             start: (state, action) => {
-                return { ...state, isLoading: true }
+                return { ...state, isLoading: true };
              },
-            success: (state, action) => {
-
+            success: (state, action, adapter: EntityAdapter<any>) => {
+                return {
+                    ...adapter.addAll(action.payload, state),
+                    isLoading: false,
+                    isLoaded: true
+                };
             },
             failure: (state, action) => {
                 return {
                     ...state,
                     isLoading: false,
                     isLoaded: false,
-                    error: action.payload ? action.payload.error : null
-                }
+                    error: action.payload
+                };
             }
         };
     }
@@ -51,10 +76,14 @@ export const create = {
     }
 };
 
-export const update = {
+export const put = {
     request: {
         path: ':/id',
         method: 'PUT',
+        fn: (info: ApiRequestHandler): Observable<any> => {
+            const res = responseHandler(info);
+            return NgrxSelect.httpClient.put(info.path, info.data).pipe(res);
+        }
     },
     handler: function() {
         return {
