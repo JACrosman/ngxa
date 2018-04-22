@@ -1,4 +1,4 @@
-import { ApiResponseInfo } from './symbols';
+import { ApiRequestInfo } from './symbols';
 
 export const NGRA_STATE_META = '__ngra__state__meta__';
 
@@ -10,8 +10,13 @@ export interface StateMetdata {
 }
 
 export interface RequestMeta {
-    response: ApiResponseInfo;
-    fn: string;
+    request: ApiRequestInfo;
+    action: string;
+    handlers: {
+        start: () => any,
+        success: () => any,
+        failure: () => any
+    };
 }
 
 export interface RequestMetaMap {

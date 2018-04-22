@@ -37,8 +37,8 @@ export class ApiService<T> {
         this.dispatch('query');
     }
 
-    public get(id: IdType | T) {
-        this.dispatch('get', { id: this.getKey(id) })
+    public get(key: IdType | T) {
+        this.dispatch('get', { id: this.getKey(key) });
     }
 
     public create(entity: T): void {
@@ -49,10 +49,10 @@ export class ApiService<T> {
         this.dispatch('update', { id: this.getKey(entity) });
     }
 
-    public delete(id: IdType | T): void {
-        this.dispatch('delete', { id: this.getKey(id) });
+    public delete(key: IdType | T): void {
+        this.dispatch('delete', { id: this.getKey(key) });
     }
-    
+
     /** Get key from entity (unless arg is already a key) */
     private getKey(arg: any) {
         return typeof arg === 'object' ? this.selectId(arg) : arg;

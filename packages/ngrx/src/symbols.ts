@@ -17,7 +17,7 @@ export type ApiMethod =
 | 'PUT'
 | 'DELETE';
 
-export interface ApiResponseInfo {
+export interface ApiRequestInfo {
     path?: string;
-    method?: ApiMethod;
+    method?: string;
 }
