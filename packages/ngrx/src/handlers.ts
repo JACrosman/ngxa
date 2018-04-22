@@ -5,9 +5,20 @@ export const query = {
     },
     handler: function() {
         return {
-            start: () => { },
-            success: () => { },
-            failure: () => { }
+            start: (state, action) => {
+                return { ...state, isLoading: true }
+             },
+            success: (state, action) => {
+
+            },
+            failure: (state, action) => {
+                return {
+                    ...state,
+                    isLoading: false,
+                    isLoaded: false,
+                    error: action.payload ? action.payload.error : null
+                }
+            }
         };
     }
 };

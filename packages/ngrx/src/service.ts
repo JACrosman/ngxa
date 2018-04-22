@@ -30,7 +30,7 @@ export class ApiService<T> {
     }
 
     protected dispatch(request: string, params?: ParamMap, data?: any)  {
-        NgrxSelect.store.dispatch({ type: `[${this.name}] ${request}`, payload: { params, data } });
+        NgrxSelect.store.dispatch({ type: `[${this.name}] ${request} start`, payload: { params, data } });
     }
 
     public query() {

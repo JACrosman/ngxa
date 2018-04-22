@@ -22,10 +22,12 @@ export function ApiState<T>(options: ApiOptions<T>) {
         target.remove = remove.handler;
 
         // Initialize default requests
+        console.log('init default api requests');
         ApiRequest(query.request)(target, 'query', null);
         ApiRequest(get.request)(target, 'get', null);
         ApiRequest(create.request)(target, 'create', null);
         ApiRequest(update.request)(target, 'update', null);
         ApiRequest(remove.request)(target, 'remove', null);
+        console.log('end init default api requests');
     };
 }

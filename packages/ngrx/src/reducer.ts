@@ -20,14 +20,12 @@ export function createReducer<TState = any>(
     throw new Error('A reducer can be created from a @ApiState decorated class only.');
   }
 
-  const instance = isInstance ? store : new store();
   const { adapter, defaults, requests, name, route } = klass[NGRA_STATE_META] as StateMetdata;
-  const initialState = adapter.getInitialState({ ...defaults });
+  const initialState = adapter.getInitialState({ ...defaults, isLoading: false, isLoaded: false, error: null });
 
   return function(state: any = initialState, action: any) {
     const requestMeta = requests[action.type];
     let result;
-
     // Handle the request reducer
     if (requestMeta) {
         result = requestMeta.handler(state, action);
@@ -36,12 +34,10 @@ export function createReducer<TState = any>(
         if (requestMeta.request) {
           RestApiService.execute(requestMeta.request, route, action.payload).pipe(
             map((data: any) => {
-              NgrxSelect.store.dispatch({ type: `[${instance.name}] ${name} success`, payload: data });
+              return of(<any>{ type: `[${name}] ${requestMeta.name} success`, payload: data });
             }),
             catchError((data: any) => {
-              NgrxSelect.store.dispatch({ type: `[${instance.name}] ${name} success`, payload: { error: data } });
-
-              return of(data);
+              return of (<any>{ type: `[${name}] ${requestMeta.name} failure`, payload: { error: data } });
             })
           ).subscribe(NgrxSelect.store);
         }
@@ -55,6 +51,6 @@ export function createReducer<TState = any>(
         }
     }
 
-    return state;
+    return result;
   };
 }

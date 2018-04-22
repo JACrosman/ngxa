@@ -12,6 +12,7 @@ export interface StateMetdata {
 }
 
 export interface RequestMeta {
+    name: string,
     request?: ApiRequestInfo;
     handler: (state, action) => any;
 }
