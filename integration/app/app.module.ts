@@ -1,18 +1,25 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 
 import { NgxaModule } from '@ngxa/ngrx';
 
-import { AppComponent } from './app.component';
+import { AppStateModule } from './state/app.state.module';
 
+import { AppComponent } from './app.component';
+import { ProjectComponent } from './project/project-list.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ProjectComponent
   ],
   imports: [
     BrowserModule,
-    NgxaModule
+    HttpClientModule,
+
+    NgxaModule,
+    AppStateModule
   ],
   providers: [],
   bootstrap: [AppComponent]

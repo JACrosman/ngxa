@@ -1,4 +1,5 @@
 import { ApiRequestInfo } from './symbols';
+import { EntityAdapter } from '@ngrx/entity';
 
 export const NGRA_STATE_META = '__ngra__state__meta__';
 
@@ -7,16 +8,12 @@ export interface StateMetdata {
     name: string;
     route: string;
     defaults: any;
+    adapter: EntityAdapter<any>;
 }
 
 export interface RequestMeta {
-    request: ApiRequestInfo;
-    action: string;
-    handlers: {
-        start: () => any,
-        success: () => any,
-        failure: () => any
-    };
+    request?: ApiRequestInfo;
+    handler: (state, action) => any;
 }
 
 export interface RequestMetaMap {
@@ -27,9 +24,10 @@ export function ensureStateMetadata(target: any): StateMetdata {
     if (!target.hasOwnProperty(NGRA_STATE_META)) {
         const defaultMetadata: StateMetdata = {
             requests: {},
+            defaults: {},
             name: null,
             route: null,
-            defaults: {}
+            adapter: null
         };
         Object.defineProperty(target, NGRA_STATE_META, { value: defaultMetadata });
     }

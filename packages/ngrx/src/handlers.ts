@@ -3,10 +3,12 @@ export const query = {
         path: '',
         method: 'GET',
     },
-    handlers: {
-        start: () => { },
-        success: () => { },
-        failure: () => { }
+    handler: function() {
+        return {
+            start: () => { },
+            success: () => { },
+            failure: () => { }
+        };
     }
 };
 
@@ -15,10 +17,12 @@ export const get = {
         path: ':/id',
         method: 'GET',
     },
-    handlers: {
-        start: () => { },
-        success: () => { },
-        failure: () => { }
+    handler: function() {
+        return {
+            start: () => { },
+            success: () => { },
+            failure: () => { }
+        };
     }
 };
 
@@ -27,10 +31,12 @@ export const create = {
         path: '',
         method: 'CREATE',
     },
-    handlers: {
-        start: () => { },
-        success: () => { },
-        failure: () => { }
+    handler: function() {
+        return {
+            start: () => { },
+            success: () => { },
+            failure: () => { }
+        };
     }
 };
 
@@ -39,10 +45,12 @@ export const update = {
         path: ':/id',
         method: 'PUT',
     },
-    handlers: {
-        start: () => { },
-        success: () => { },
-        failure: () => { }
+    handler: function() {
+        return {
+            start: () => { },
+            success: () => { },
+            failure: () => { }
+        };
     }
 };
 
@@ -51,9 +59,11 @@ export const remove = {
         path: ':/id',
         method: 'DELETE',
     },
-    handlers: {
-        start: () => { },
-        success: () => { },
-        failure: () => { }
+    handler: function() {
+        return {
+            start: () => { },
+            success: () => { },
+            failure: () => { }
+        };
     }
 };

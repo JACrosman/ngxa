@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 
+import { NgrxSelect } from './select';
 import { IdSelector, defaultSelectId } from './utils';
 
 export interface ParamMap {
@@ -23,14 +24,13 @@ export class ApiService<T> {
     isLoaded$: Observable<boolean>;
 
     constructor(
-        private name: string,
-        private factory: ApiServiceFactory
+        private name: string
     ) {
         this.selectId = defaultSelectId;
     }
 
     protected dispatch(request: string, params?: ParamMap, data?: any)  {
-        this.factory.store.dispatch({ type: `$[${this.name}] ${request}`, payload: { params, data } });
+        NgrxSelect.store.dispatch({ type: `[${this.name}] ${request}`, payload: { params, data } });
     }
 
     public query() {

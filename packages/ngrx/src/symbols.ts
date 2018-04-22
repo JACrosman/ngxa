@@ -20,4 +20,5 @@ export type ApiMethod =
 export interface ApiRequestInfo {
     path?: string;
     method?: string;
+    options?: any;
 }

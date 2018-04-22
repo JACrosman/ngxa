@@ -1,4 +1,8 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { HttpClient } from '@angular/common/http';
+
+import { NgrxSelect } from './select';
 
 /**
  * Root module
@@ -22,7 +26,16 @@ export class NgxaModule {
     return {
       ngModule: NgxaRootModule,
       providers: [
+        NgrxSelect
       ]
     };
+  }
+
+  constructor(
+    store: Store<any>,
+    httpClient: HttpClient,
+    select: NgrxSelect
+  ) {
+    select.connect(store, httpClient);
   }
 }
