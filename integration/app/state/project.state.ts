@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiEntityState, ApiState, ApiRequest, ApiResponse, ApiService } from '@ngxa/ngrx';
+import { ApiEntityState, ApiState, ApiResponse, ApiService } from '@ngxa/ngrx';
 
 export interface Project {
     id: string;
@@ -37,11 +37,10 @@ export class ProjectApiState {
 @Injectable()
 export class ProjectApiService extends ApiService<ProjectState> {
     constructor() {
-        super('project');
+        super('project', null);
     }
 
-    @ApiRequest()
     publish(name: string, project: Project) {
-        this.request({ name }, project);
+        this.dispatch('publish', { name }, project);
     }
 }

@@ -1,4 +1,4 @@
-import { ensureStateMetadata } from './internals';
+// import { ensureStateMetadata } from './internals';
 
 export interface ApiEntityState<T> {
     collection?: T[];
