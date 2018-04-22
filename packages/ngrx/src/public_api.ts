@@ -1,4 +1,5 @@
 export { NgxaModule } from './module';
-export { ApiResponse } from './response';
-export { ApiEntityState, ApiState } from './state';
+export { ApiRequest } from './request';
+export { ApiState } from './state';
 export { ApiService } from './service';
+export { ApiEntityState, ApiMethod, ApiOptions, ApiResponseInfo } from './symbols';

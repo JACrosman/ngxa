@@ -3,21 +3,29 @@ import { ApiResponseInfo } from './symbols';
 export const NGRA_STATE_META = '__ngra__state__meta__';
 
 export interface StateMetdata {
-    responses: {}
+    requests: RequestMetaMap;
+    name: string;
+    route: string;
+    defaults: any;
 }
 
-export interface ResponseMeta {
+export interface RequestMeta {
     response: ApiResponseInfo;
     fn: string;
 }
 
-export interface ResponseMetas {
-    [type: string]: ResponseMeta;
+export interface RequestMetaMap {
+    [type: string]: RequestMeta;
 }
 
 export function ensureStateMetadata(target: any): StateMetdata {
     if (!target.hasOwnProperty(NGRA_STATE_META)) {
-        const defaultMetadata: StateMetdata = { responses: {} };
+        const defaultMetadata: StateMetdata = {
+            requests: {},
+            name: null,
+            route: null,
+            defaults: {}
+        };
         Object.defineProperty(target, NGRA_STATE_META, { value: defaultMetadata });
     }
     return target[NGRA_STATE_META];

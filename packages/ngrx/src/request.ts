@@ -1,11 +1,11 @@
 import { ensureStateMetadata } from './internals';
 import { ApiResponseInfo } from './symbols';
 
-export function ApiResponse(options: ApiResponseInfo) {
+export function ApiRequest(options: ApiResponseInfo) {
     return function(target: any, name: string, descriptor: TypedPropertyDescriptor<any>) {
         const meta = ensureStateMetadata(target.constructor);
 
-        meta.responses[name] = {
+        meta.requests[name] = {
             response: options,
             fn: name
         }

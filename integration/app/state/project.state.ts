@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiEntityState, ApiState, ApiResponse, ApiService } from '@ngxa/ngrx';
+import { ApiEntityState, ApiState, ApiRequest, ApiService } from '@ngxa/ngrx';
 
 export interface Project {
     id: string;
@@ -18,7 +18,7 @@ export interface ProjectState extends ApiEntityState<Project> {
     }
 })
 export class ProjectApiState {
-    @ApiResponse({ path: '/publish/:name', method: 'PUT' })
+    @ApiRequest({ path: '/publish/:name', method: 'PUT' })
     publish() {
         return {
             start: (state: ProjectState) => {
