@@ -5,6 +5,7 @@ import { Store, createSelector } from '@ngrx/store';
 import { NgrxSelect } from './select';
 import { IdSelector, defaultSelectId } from './utils';
 import { ApiEntityState } from './symbols';
+import { createRequestAction } from './internals';
 
 export interface ParamMap {
     [key: string]: IdType;
@@ -33,7 +34,7 @@ export class ApiService<T> {
     }
 
     protected dispatch(request: string, params?: ParamMap, data?: any)  {
-        NgrxSelect.store.dispatch({ type: `[${this.name}] ${request} start`, payload: { params, data } });
+        NgrxSelect.store.dispatch({ type: createRequestAction(this.name, request, 'start'), payload: { params, data } });
     }
 
     public query() {

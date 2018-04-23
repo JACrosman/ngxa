@@ -1,4 +1,5 @@
 import { EntityState } from '@ngrx/entity';
+import { Action } from '@ngrx/store';
 
 export interface ApiEntityState<T> extends EntityState<T> {
     collection?: T[];
@@ -11,6 +12,7 @@ export interface ApiOptions<T> {
     name: string;
     route: string;
     defaults: Partial<T>;
+    subRoutes: string[];
 }
 
 export type ApiMethod =
@@ -31,3 +33,5 @@ export interface ApiRequestHandler {
     info?: ApiRequestInfo;
     data: any;
 }
+
+export type ActionType<T extends Action = Action> = { new (...args: any[]): T };

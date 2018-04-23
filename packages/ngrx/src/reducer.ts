@@ -2,7 +2,7 @@ import { Action } from '@ngrx/store';
 import { map, catchError } from 'rxjs/operators';
 import { of } from 'rxjs/observable/of';
 
-import { NGRA_STATE_META, StateMetdata, generateUrl } from './internals';
+import { NGRA_STATE_META, StateMetdata, generateUrl, createRequestAction } from './internals';
 import { NgrxSelect } from './select';
 
 export function createReducer<TState = any>(
@@ -19,19 +19,22 @@ export function createReducer<TState = any>(
     throw new Error('A reducer can be created from a @ApiState decorated class only.');
   }
 
-  const { adapter, defaults, requests, name, route } = klass[NGRA_STATE_META] as StateMetdata;
+  const instance = isInstance ? store : new store();
+  const { requests, actions, adapter, defaults, name, route } = klass[NGRA_STATE_META] as StateMetdata;
   const initialState = adapter.getInitialState({ ...defaults, isLoading: false, isLoaded: false, error: null });
 
   return function(state: any = initialState, action: any) {
     const requestMeta = requests[action.type];
     let result;
-    // Handle the request reducer
+
     if (requestMeta) {
+        // Handle the request reducer
         result = requestMeta.handler(state, action, adapter);
 
         // Make the request if necessary
-        if (requestMeta.handler) {
-          const requestHandler = requestMeta.request || klass[requestMeta.info.method.toLowerCase()].request.fn;
+        if (requestMeta.info) {
+          const requestHandler = requestMeta.request ||
+            requests[createRequestAction(name, requestMeta.info.method.toLowerCase(), 'start')].request;
           const path = generateUrl(name, requestMeta.info, route);
           const info = requestMeta.info;
           const data = action.payload;
@@ -45,6 +48,12 @@ export function createReducer<TState = any>(
             })
           ).subscribe(NgrxSelect.store);
         }
+    } else {
+      const actionMeta = actions[action.type];
+
+      if (actionMeta) {
+        result = instance[actionMeta.fn](state, action);
+      }
     }
 
     if (result === undefined) {

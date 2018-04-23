@@ -2,17 +2,28 @@
 import { Observable } from 'rxjs/Observable';
 import { EntityAdapter } from '@ngrx/entity';
 
-import { ApiRequestInfo, ApiRequestHandler } from './symbols';
+import { ApiRequestInfo, ApiRequestHandler, ActionType } from './symbols';
 
 export const NGRA_STATE_META = '__ngra__state__meta__';
 
 export interface StateMetdata {
     requests: RequestMetaMap;
+    actions: ActionsMeta;
     name: string;
     route: string;
     defaults: any;
     adapter: EntityAdapter<any>;
 }
+
+export interface ActionMeta {
+    action: ActionType;
+    fn: string;
+    type: string;
+}
+
+export type ActionsMeta = {
+    [type: string]: ActionMeta;
+};
 
 export interface RequestMeta {
     name: string;
@@ -29,6 +40,7 @@ export function ensureStateMetadata(target: any): StateMetdata {
     if (!target.hasOwnProperty(NGRA_STATE_META)) {
         const defaultMetadata: StateMetdata = {
             requests: {},
+            actions: {},
             defaults: {},
             name: null,
             route: null,
@@ -39,6 +51,10 @@ export function ensureStateMetadata(target: any): StateMetdata {
     return target[NGRA_STATE_META];
 }
 
-export function generateUrl( name: string, info: ApiRequestInfo, route: string) {
+export function generateUrl(name: string, info: ApiRequestInfo, route: string) {
     return `${route}/${info.path}`;
+}
+
+export function createRequestAction(stateName: string, actionName: string, operation: string) {
+    return `[${stateName}] ${actionName} ${operation}`;
 }

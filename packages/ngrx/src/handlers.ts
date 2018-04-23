@@ -19,13 +19,13 @@ export const query = {
     request: {
         path: '',
         method: 'GET',
-        fn: (info: ApiRequestHandler): Observable<any> => {
-            const res = responseHandler(info);
-            return NgrxSelect.httpClient.get(info.path).pipe(res);
-        }
     },
     handler: function() {
         return {
+            request: (info: ApiRequestHandler): Observable<any> => {
+                const res = responseHandler(info);
+                return NgrxSelect.httpClient.get(info.path).pipe(res);
+            },
             start: (state, action) => {
                 return { ...state, isLoading: true };
              },
@@ -80,13 +80,13 @@ export const put = {
     request: {
         path: ':/id',
         method: 'PUT',
-        fn: (info: ApiRequestHandler): Observable<any> => {
-            const res = responseHandler(info);
-            return NgrxSelect.httpClient.put(info.path, info.data).pipe(res);
-        }
     },
     handler: function() {
         return {
+            request: (info: ApiRequestHandler): Observable<any> => {
+                const res = responseHandler(info);
+                return NgrxSelect.httpClient.put(info.path, info.data).pipe(res);
+            },
             start: () => { },
             success: () => { },
             failure: () => { }

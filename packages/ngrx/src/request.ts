@@ -1,16 +1,16 @@
-import { ensureStateMetadata } from './internals';
+import { ensureStateMetadata, createRequestAction } from './internals';
 import { ApiRequestInfo } from './symbols';
 
 export function ApiRequest(options: ApiRequestInfo) {
     return function(target: any, name: string, descriptor: TypedPropertyDescriptor<any>) {
         const meta = ensureStateMetadata(options.name ? target.constructor : target);
         const handlers = target[name]();
+        const stateName = meta.name || options.name;
 
         // Build action types
-        const action = `[${meta.name || options.name}] ${name}`;
-        const startAction = `${action} start`;
-        const successAction = `${action} success`;
-        const failureAction = `${action} failure`;
+        const startAction = createRequestAction(stateName, name, 'start');
+        const successAction = createRequestAction(stateName, name, 'success');
+        const failureAction = createRequestAction(stateName, name, 'failure');
 
         // Build start action
         meta.requests[startAction] = {
