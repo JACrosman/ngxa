@@ -2,10 +2,11 @@ import { Observable } from 'rxjs/Observable';
 import { catchError } from 'rxjs/operators';
 import { pipe } from 'rxjs/util/pipe';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
-import { EntityAdapter } from "@ngrx/entity";
+import { EntityAdapter } from '@ngrx/entity';
 
 import { ApiRequestHandler } from './symbols';
 import { NgrxSelect } from './select';
+import { toUpdateFactory, defaultSelectId } from './utils';
 
 function responseHandler(req: ApiRequestHandler) {
    return pipe(
@@ -14,6 +15,8 @@ function responseHandler(req: ApiRequestHandler) {
         })
     );
 }
+
+const toUpdate = toUpdateFactory(defaultSelectId);
 
 export const query = {
     request: {
@@ -55,23 +58,58 @@ export const get = {
     },
     handler: function() {
         return {
-            start: () => { },
-            success: () => { },
-            failure: () => { }
+            request: (info: ApiRequestHandler): Observable<any> => {
+                const res = responseHandler(info);
+                return NgrxSelect.httpClient.get(info.path).pipe(res);
+            },
+            start: (state, action) => {
+                return { ...state, isLoading: true };
+            },
+            success: (state, action, adapter: EntityAdapter<any>) => {
+                const upsert = action.payload && toUpdate(action.payload);
+                return upsert == null ?
+                state.loading ? { ...state, loading: false } : state :
+                {
+                    ...adapter.upsertOne(upsert, state),
+                    loading: false,
+                    entityId: defaultSelectId(action.payload)
+                };
+            },
+            failure: (state, action) => {
+                return {
+                    ...state,
+                    isLoading: false,
+                    isLoaded: false,
+                    error: action.payload
+                };
+            }
         };
     }
 };
 
-export const create = {
+export const post = {
     request: {
         path: '',
-        method: 'CREATE',
+        method: 'POST',
     },
     handler: function() {
         return {
-            start: () => { },
-            success: () => { },
-            failure: () => { }
+            request: (info: ApiRequestHandler): Observable<any> => {
+                const res = responseHandler(info);
+                return NgrxSelect.httpClient.post(info.path, info.data).pipe(res);
+            },
+            start: (state, action) => {
+                return state;
+            },
+            success: (state, action, adapter: EntityAdapter<any>) => {
+                return adapter.addOne(action.payload, state);
+            },
+            failure: (state, action) => {
+                return {
+                    ...state,
+                    error: action.payload
+                };
+            }
         };
     }
 };
@@ -87,9 +125,18 @@ export const put = {
                 const res = responseHandler(info);
                 return NgrxSelect.httpClient.put(info.path, info.data).pipe(res);
             },
-            start: () => { },
-            success: () => { },
-            failure: () => { }
+            start: (state, action) => {
+                return state;
+            },
+            success: (state, action, adapter: EntityAdapter<any>) => {
+                return adapter.upsertOne(action.payload, state);
+            },
+            failure: (state, action) => {
+                return {
+                    ...state,
+                    error: action.payload
+                };
+            }
         };
     }
 };
@@ -101,9 +148,25 @@ export const remove = {
     },
     handler: function() {
         return {
-            start: () => { },
-            success: () => { },
-            failure: () => { }
+            request: (info: ApiRequestHandler): Observable<any> => {
+                const res = responseHandler(info);
+                return NgrxSelect.httpClient.delete(info.path).pipe(res);
+            },
+            start: (state, action) => {
+                return state;
+            },
+            success: (state, action, adapter: EntityAdapter<any>) => {
+                return {
+                    ...adapter.removeOne(action.payload, state),
+                    entityId: null
+                };
+            },
+            failure: (state, action) => {
+                return {
+                    ...state,
+                    error: action.payload
+                };
+            }
         };
     }
 };

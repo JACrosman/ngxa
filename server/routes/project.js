@@ -12,4 +12,8 @@ router.get('/', function (req, res) {
     return res.send(projects);
 });
 
+router.put('/publish/:name', function(req, res) {
+    return res.send({ id: '1', name: 'Test Publish ' + req.params.name });
+});
+
 module.exports = router;

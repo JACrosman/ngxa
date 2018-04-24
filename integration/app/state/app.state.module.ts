@@ -10,17 +10,17 @@ export function projectReducer(state, action) { return createReducer(ProjectApiS
 
 @NgModule({
     imports: [
-    NgxaModule.forRoot(),
-       StoreModule.forRoot({
-          project: projectReducer
-       }),
-       StoreDevtoolsModule.instrument({
-        name: 'NGXA',
-        maxAge: 25
-      })
+        NgxaModule.forRoot(),
+        StoreModule.forRoot({
+            project: projectReducer
+        }),
+        StoreDevtoolsModule.instrument({
+            name: 'NGXA',
+            maxAge: 25
+        })
     ],
     providers: [
         ProjectApiService
     ]
- })
- export class AppStateModule { }
+})
+export class AppStateModule { }

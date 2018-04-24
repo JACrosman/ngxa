@@ -11,8 +11,8 @@ export interface ApiEntityState<T> extends EntityState<T> {
 export interface ApiOptions<T> {
     name: string;
     route: string;
-    defaults: Partial<T>;
-    subRoutes: string[];
+    defaults?: Partial<T>;
+    subRoutes?: string[];
 }
 
 export type ApiMethod =

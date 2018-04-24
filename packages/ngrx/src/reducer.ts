@@ -5,6 +5,13 @@ import { of } from 'rxjs/observable/of';
 import { NGRA_STATE_META, StateMetdata, generateUrl, createRequestAction } from './internals';
 import { NgrxSelect } from './select';
 
+const methodMap = {
+  get: 'get',
+  post: 'post',
+  put: 'put',
+  delete: 'remove'
+};
+
 export function createReducer<TState = any>(
   store:
     | {
@@ -34,10 +41,10 @@ export function createReducer<TState = any>(
         // Make the request if necessary
         if (requestMeta.info) {
           const requestHandler = requestMeta.request ||
-            requests[createRequestAction(name, requestMeta.info.method.toLowerCase(), 'start')].request;
-          const path = generateUrl(name, requestMeta.info, route);
+            requests[createRequestAction(name, methodMap[requestMeta.info.method.toLowerCase()], 'start')].request;
+          const path = generateUrl(requestMeta.info, route, action.payload.params);
           const info = requestMeta.info;
-          const data = action.payload;
+          const data = action.payload.data;
 
           requestHandler({ info, path, data }).pipe(
             map((response: any) => {

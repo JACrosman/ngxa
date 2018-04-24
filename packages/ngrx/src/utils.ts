@@ -26,3 +26,13 @@ export type Update<T> = UpdateStr<T> | UpdateNum<T>;
 export function defaultSelectId(entity: any) {
     return entity == null ? undefined : entity.id;
 }
+
+export function toUpdateFactory<T>(selectId?: IdSelector<T>) {
+  selectId = selectId || defaultSelectId as IdSelector<T>;
+
+  return function toUpdate(entity: Partial<T>): Update<T> {
+    const id: any = selectId(entity);
+    if (id == null) { throw new Error('Primary key may not be null/undefined.'); }
+    return entity && { id, changes: entity } ;
+  };
+}

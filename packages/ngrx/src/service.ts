@@ -8,7 +8,7 @@ import { ApiEntityState } from './symbols';
 import { createRequestAction } from './internals';
 
 export interface ParamMap {
-    [key: string]: IdType;
+    [key: string]: string;
 }
 
 export type IdType = string | number;

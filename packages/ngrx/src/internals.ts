@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { EntityAdapter } from '@ngrx/entity';
 
 import { ApiRequestInfo, ApiRequestHandler, ActionType } from './symbols';
+import { ParamMap } from './service';
 
 export const NGRA_STATE_META = '__ngra__state__meta__';
 
@@ -51,8 +52,14 @@ export function ensureStateMetadata(target: any): StateMetdata {
     return target[NGRA_STATE_META];
 }
 
-export function generateUrl(name: string, info: ApiRequestInfo, route: string) {
-    return `${route}/${info.path}`;
+export function generateUrl(info: ApiRequestInfo, route: string, params?: ParamMap) {
+    let path = info.path;
+
+    if (params) {
+        Object.keys(params).forEach(param => { path = path.replace(`:${param}`, params[param]); });
+    }
+
+    return `${route}/${path}`;
 }
 
 export function createRequestAction(stateName: string, actionName: string, operation: string) {

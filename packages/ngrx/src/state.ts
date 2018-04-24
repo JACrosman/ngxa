@@ -3,7 +3,7 @@ import { createEntityAdapter } from '@ngrx/entity';
 import { ensureStateMetadata } from './internals';
 import { ApiRequest } from './request';
 import { ApiOptions } from './symbols';
-import { query, get, create, put, remove } from './handlers';
+import { query, get, post, put, remove } from './handlers';
 
 export function ApiState<T>(options: ApiOptions<T>) {
     return function(target: any) {
@@ -17,14 +17,14 @@ export function ApiState<T>(options: ApiOptions<T>) {
         // Set handlers on the target class
         target.query = query.handler;
         target.get = get.handler;
-        target.create = create.handler;
+        target.post = post.handler;
         target.put = put.handler;
         target.remove = remove.handler;
 
         // Initialize default requests
         ApiRequest(query.request)(target, 'query', null);
         ApiRequest(get.request)(target, 'get', null);
-        ApiRequest(create.request)(target, 'create', null);
+        ApiRequest(post.request)(target, 'post', null);
         ApiRequest(put.request)(target, 'put', null);
         ApiRequest(remove.request)(target, 'remove', null);
     };
