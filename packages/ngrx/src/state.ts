@@ -12,6 +12,7 @@ export function ApiState<T>(options: ApiOptions<T>) {
         metadata.name = options.name;
         metadata.route = options.route;
         metadata.defaults = options.defaults;
+        metadata.subRoutes = options.subRoutes;
         metadata.adapter = createEntityAdapter<T>();
 
         // Set handlers on the target class

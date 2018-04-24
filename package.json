@@ -29,7 +29,7 @@
   ],
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --aot",
+    "start": "ng serve --aot --port 4201",
     "start:server": "node server/server",
     "build": "yarn build:packages",
     "build:packages": "ng-packagr -p packages/ngrx/ng-package.json",

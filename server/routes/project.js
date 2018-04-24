@@ -12,6 +12,10 @@ router.get('/', function (req, res) {
     return res.send(projects);
 });
 
+router.get('/:id', function (req, res) {
+    return res.send(projects.find(project => project.id == req.params.id));
+});
+
 router.put('/publish/:name', function(req, res) {
     return res.send({ id: '1', name: 'Test Publish ' + req.params.name });
 });

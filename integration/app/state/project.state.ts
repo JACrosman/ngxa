@@ -19,7 +19,7 @@ export interface ProjectState extends ApiEntityState<Project> {
     }
 })
 export class ProjectApiState {
-    @ApiRequest({ name: 'project', path: 'publish/:name', method: 'PUT' })
+    @ApiRequest({ name: 'project', path: '/publish/:name', method: 'PUT' })
     publish() {
         return {
             start: (state: ProjectState) => {

@@ -2,8 +2,8 @@ import { Action } from '@ngrx/store';
 import { map, catchError } from 'rxjs/operators';
 import { of } from 'rxjs/observable/of';
 
-import { NGRA_STATE_META, StateMetdata, generateUrl, createRequestAction } from './internals';
-import { NgrxSelect } from './select';
+import { NGRA_STATE_META, StateMetdata, generateUrl, createRequestAction, generateParams } from './internals';
+import { NgrxSelect, getState } from './select';
 
 const methodMap = {
   get: 'get',
@@ -27,7 +27,7 @@ export function createReducer<TState = any>(
   }
 
   const instance = isInstance ? store : new store();
-  const { requests, actions, adapter, defaults, name, route } = klass[NGRA_STATE_META] as StateMetdata;
+  const { requests, actions, adapter, defaults, name, route, subRoutes } = klass[NGRA_STATE_META] as StateMetdata;
   const initialState = adapter.getInitialState({ ...defaults, isLoading: false, isLoaded: false, error: null });
 
   return function(state: any = initialState, action: any) {
@@ -42,7 +42,8 @@ export function createReducer<TState = any>(
         if (requestMeta.info) {
           const requestHandler = requestMeta.request ||
             requests[createRequestAction(name, methodMap[requestMeta.info.method.toLowerCase()], 'start')].request;
-          const path = generateUrl(requestMeta.info, route, action.payload.params);
+          const params = subRoutes ? generateParams(getState(), subRoutes) : {};
+          const path = generateUrl(requestMeta.info, route, { ...action.payload.params, ...params });
           const info = requestMeta.info;
           const data = action.payload.data;
 

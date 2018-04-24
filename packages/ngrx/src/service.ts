@@ -77,7 +77,7 @@ export class ApiService<T> {
         const selectEntity = createSelector(
             selectEntities,
             selectSelectedEntityId,
-            (entities, id) => id && entities.filter(entity => entity._id === id)[0]
+            (entities, id) => id && entities.filter(entity => entity.id === id)[0]
         );
 
         const selectStateEntities = createSelector(

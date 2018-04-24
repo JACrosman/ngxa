@@ -53,7 +53,7 @@ export const query = {
 
 export const get = {
     request: {
-        path: ':/id',
+        path: '/:id',
         method: 'GET',
     },
     handler: function() {
@@ -116,7 +116,7 @@ export const post = {
 
 export const put = {
     request: {
-        path: ':/id',
+        path: '/:id',
         method: 'PUT',
     },
     handler: function() {
@@ -143,7 +143,7 @@ export const put = {
 
 export const remove = {
     request: {
-        path: ':/id',
+        path: '/:id',
         method: 'DELETE',
     },
     handler: function() {

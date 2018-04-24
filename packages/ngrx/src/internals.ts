@@ -12,6 +12,7 @@ export interface StateMetdata {
     actions: ActionsMeta;
     name: string;
     route: string;
+    subRoutes: string[];
     defaults: any;
     adapter: EntityAdapter<any>;
 }
@@ -43,6 +44,7 @@ export function ensureStateMetadata(target: any): StateMetdata {
             requests: {},
             actions: {},
             defaults: {},
+            subRoutes: null,
             name: null,
             route: null,
             adapter: null
@@ -52,14 +54,21 @@ export function ensureStateMetadata(target: any): StateMetdata {
     return target[NGRA_STATE_META];
 }
 
+export function generateParams(state: any, subRoutes: string[]) {
+    return subRoutes.reduce((prev, curr) => {
+        prev[curr] = state[curr].entityId;
+        return prev;
+    }, {});
+}
+
 export function generateUrl(info: ApiRequestInfo, route: string, params?: ParamMap) {
-    let path = info.path;
+    let path = `${route}${info.path}`;
 
     if (params) {
         Object.keys(params).forEach(param => { path = path.replace(`:${param}`, params[param]); });
     }
 
-    return `${route}/${path}`;
+    return path;
 }
 
 export function createRequestAction(stateName: string, actionName: string, operation: string) {
