@@ -1,0 +1,9 @@
+{
+    "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
+    "dest": "../../builds/ngrx",
+    "lib": {
+      "flatModuleFile": "ngxa-ngrx",
+      "entryFile": "index.ts",
+      "umdModuleIds": {}
+    }
+  }
