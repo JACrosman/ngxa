@@ -1,12 +1,13 @@
 {
-  "name": "ngxa",
+  "name": "ngx-api",
+  "description": "Makes REST api calls easy in ngrx",
   "version": "0.0.1",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/JACrosman/ngxa.git"
   },
   "keywords": [
-    "ngxa",
+    "ngx-api",
     "rest",
     "redux",
     "state",

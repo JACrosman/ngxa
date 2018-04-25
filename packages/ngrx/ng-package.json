@@ -2,7 +2,7 @@
     "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
     "dest": "../../builds/ngrx",
     "lib": {
-      "flatModuleFile": "ngxa-ngrx",
+      "flatModuleFile": "ngx-api",
       "entryFile": "index.ts",
       "umdModuleIds": {}
     }
