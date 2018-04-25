@@ -4,7 +4,7 @@ import { ApiRequestInfo } from './symbols';
 export function ApiRequest(options: ApiRequestInfo) {
     return function(target: any, name: string, descriptor: TypedPropertyDescriptor<any>) {
         const meta = ensureStateMetadata(options.name ? target.constructor : target);
-        const handlers = target[name]();
+        const handlers = target[name](meta.idSelector);
         const stateName = meta.name || options.name;
 
         // Build action types

@@ -19,7 +19,7 @@ export class CourseApiState {
 
 @Injectable()
 export class CourseApiService extends ApiService<Course> {
-    constructor() {
-        super('course');
+    constructor(courseState: CourseApiState) {
+        super(courseState);
     }
 }

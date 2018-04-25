@@ -3,19 +3,16 @@ import { Observable } from 'rxjs/Observable';
 import { Store, createSelector } from '@ngrx/store';
 
 import { NgrxSelect } from './select';
-import { IdSelector, defaultSelectId } from './utils';
 import { ApiEntityState } from './symbols';
-import { createRequestAction } from './internals';
+import { createRequestAction, ensureStateMetadata, StateMetdata } from './internals';
+import { IdType } from './utils';
 
 export interface ParamMap {
     [key: string]: string;
 }
 
-export type IdType = string | number;
-
 export class ApiService<T> {
-    /** Returns the primary key (id) of this entity */
-    selectId: IdSelector<T>;
+    private metadata: StateMetdata;
 
     entities$: Observable<T[]>;
 
@@ -25,10 +22,18 @@ export class ApiService<T> {
 
     isLoaded$: Observable<boolean>;
 
+    get name() {
+        return this.metadata.name;
+    }
+
+    get idSelector() {
+        return this.metadata.idSelector;
+    }
+
     constructor(
-        private name: string
+        state: any
     ) {
-        this.selectId = defaultSelectId;
+        this.metadata = ensureStateMetadata(state.constructor);
 
         this.createSelectors();
     }
@@ -59,7 +64,7 @@ export class ApiService<T> {
 
     /** Get key from entity (unless arg is already a key) */
     private getKey(arg: any) {
-        return typeof arg === 'object' ? this.selectId(arg) : arg;
+        return typeof arg === 'object' ? this.idSelector(arg) : arg;
     }
 
     private createSelectors() {
@@ -77,7 +82,7 @@ export class ApiService<T> {
         const selectEntity = createSelector(
             selectEntities,
             selectSelectedEntityId,
-            (entities, id) => id && entities.filter(entity => entity.id === id)[0]
+            (entities, id) => id && entities.filter(entity => this.idSelector(entity) === id)[0]
         );
 
         const selectStateEntities = createSelector(

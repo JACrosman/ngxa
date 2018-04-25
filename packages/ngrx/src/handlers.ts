@@ -6,7 +6,7 @@ import { EntityAdapter } from '@ngrx/entity';
 
 import { ApiRequestHandler } from './symbols';
 import { NgrxSelect } from './select';
-import { toUpdateFactory, defaultSelectId } from './utils';
+import { toUpdateFactory, IdSelector } from './utils';
 
 function responseHandler(req: ApiRequestHandler) {
    return pipe(
@@ -15,8 +15,6 @@ function responseHandler(req: ApiRequestHandler) {
         })
     );
 }
-
-const toUpdate = toUpdateFactory(defaultSelectId);
 
 export const query = {
     request: {
@@ -56,7 +54,9 @@ export const get = {
         path: '/:id',
         method: 'GET',
     },
-    handler: function() {
+    handler: function(idSelector: IdSelector<any>) {
+        const toUpdate = toUpdateFactory(idSelector);
+
         return {
             request: (info: ApiRequestHandler): Observable<any> => {
                 const res = responseHandler(info);
@@ -72,7 +72,7 @@ export const get = {
                 {
                     ...adapter.upsertOne(upsert, state),
                     loading: false,
-                    entityId: defaultSelectId(action.payload)
+                    entityId: idSelector(action.payload)
                 };
             },
             failure: (state, action) => {

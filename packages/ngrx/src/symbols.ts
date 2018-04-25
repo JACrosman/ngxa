@@ -1,5 +1,6 @@
 import { EntityState } from '@ngrx/entity';
 import { Action } from '@ngrx/store';
+import { IdSelector } from './utils';
 
 export interface ApiEntityState<T> extends EntityState<T> {
     collection?: T[];
@@ -13,6 +14,7 @@ export interface ApiOptions<T> {
     route: string;
     defaults?: Partial<T>;
     subRoutes?: string[];
+    idSelector?: IdSelector<T>;
 }
 
 export type ApiMethod =

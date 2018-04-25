@@ -37,8 +37,8 @@ export class ProjectApiState {
 
 @Injectable()
 export class ProjectApiService extends ApiService<Project> {
-    constructor() {
-        super('project');
+    constructor(projectState: ProjectApiState) {
+        super(projectState);
     }
 
     publish(name: string, project: Project) {

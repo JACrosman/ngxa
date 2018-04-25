@@ -23,6 +23,8 @@ export interface UpdateNum<T> {
 
 export type Update<T> = UpdateStr<T> | UpdateNum<T>;
 
+export type IdType = string | number;
+
 export function defaultSelectId(entity: any) {
     return entity == null ? undefined : entity.id;
 }

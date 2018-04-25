@@ -4,6 +4,7 @@ import { ensureStateMetadata } from './internals';
 import { ApiRequest } from './request';
 import { ApiOptions } from './symbols';
 import { query, get, post, put, remove } from './handlers';
+import { defaultSelectId } from './utils';
 
 export function ApiState<T>(options: ApiOptions<T>) {
     return function(target: any) {
@@ -13,7 +14,10 @@ export function ApiState<T>(options: ApiOptions<T>) {
         metadata.route = options.route;
         metadata.defaults = options.defaults;
         metadata.subRoutes = options.subRoutes;
-        metadata.adapter = createEntityAdapter<T>();
+        metadata.adapter = createEntityAdapter<T>({
+            selectId: metadata.idSelector
+        });
+        metadata.idSelector = options.idSelector || defaultSelectId;
 
         // Set handlers on the target class
         target.query = query.handler;

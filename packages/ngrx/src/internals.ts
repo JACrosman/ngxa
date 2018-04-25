@@ -4,6 +4,7 @@ import { EntityAdapter } from '@ngrx/entity';
 
 import { ApiRequestInfo, ApiRequestHandler, ActionType } from './symbols';
 import { ParamMap } from './service';
+import { defaultSelectId, IdSelector } from './utils';
 
 export const NGRA_STATE_META = '__ngra__state__meta__';
 
@@ -15,6 +16,7 @@ export interface StateMetdata {
     subRoutes: string[];
     defaults: any;
     adapter: EntityAdapter<any>;
+    idSelector: IdSelector<any>;
 }
 
 export interface ActionMeta {
@@ -47,7 +49,8 @@ export function ensureStateMetadata(target: any): StateMetdata {
             subRoutes: null,
             name: null,
             route: null,
-            adapter: null
+            adapter: null,
+            idSelector: defaultSelectId
         };
         Object.defineProperty(target, NGRA_STATE_META, { value: defaultMetadata });
     }
