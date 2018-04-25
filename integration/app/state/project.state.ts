@@ -3,7 +3,7 @@ import { ApiEntityState, ApiState, ApiRequest, ApiService } from '@ngxa/ngrx';
 import { EntityAdapter } from '@ngrx/entity';
 
 export interface Project {
-    id: string;
+    _id: string;
     name: string;
 }
 
@@ -16,7 +16,8 @@ export interface ProjectState extends ApiEntityState<Project> {
     route: 'http://localhost:3000/api/project',
     defaults: {
         isPublishing: false
-    }
+    },
+    idSelector: (project: any) => project._id
 })
 export class ProjectApiState {
     @ApiRequest({ name: 'project', path: '/publish/:name', method: 'PUT' })
@@ -26,7 +27,7 @@ export class ProjectApiState {
                 return { ...state, isPublishing: true };
             },
             success: (state: ProjectState, result: any, adapter: EntityAdapter<Project>) => {
-                return { ...adapter.updateOne({ id: result.payload.id, changes: result.payload }, state), isPublished: true, isPublishing: false };
+                return { ...adapter.updateOne({ id: result.payload._id, changes: result.payload }, state), isPublished: true, isPublishing: false };
             },
             failure: (state: ProjectState, result: any) => {
                 return { ...state, isPublished: false, isPublishing: false };

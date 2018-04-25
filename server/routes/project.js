@@ -4,8 +4,8 @@ var bodyParser = require('body-parser');
 router.use(bodyParser.urlencoded({ extended: true }));
 
 var projects = [
-    { id: '1', name: 'Test 1' },
-    { id: '2', name: 'Test 2' },
+    { _id: '1', name: 'Test 1' },
+    { _id: '2', name: 'Test 2' },
 ];
 
 router.get('/', function (req, res) {
@@ -13,11 +13,11 @@ router.get('/', function (req, res) {
 });
 
 router.get('/:id', function (req, res) {
-    return res.send(projects.find(project => project.id == req.params.id));
+    return res.send(projects.find(project => project._id == req.params.id));
 });
 
 router.put('/publish/:name', function(req, res) {
-    return res.send({ id: '1', name: 'Test Publish ' + req.params.name });
+    return res.send({ _id: '1', name: 'Test Publish ' + req.params.name });
 });
 
 module.exports = router;

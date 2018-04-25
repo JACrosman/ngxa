@@ -14,10 +14,10 @@ export function ApiState<T>(options: ApiOptions<T>) {
         metadata.route = options.route;
         metadata.defaults = options.defaults;
         metadata.subRoutes = options.subRoutes;
+        metadata.idSelector = options.idSelector || defaultSelectId;
         metadata.adapter = createEntityAdapter<T>({
             selectId: metadata.idSelector
         });
-        metadata.idSelector = options.idSelector || defaultSelectId;
 
         // Set handlers on the target class
         target.query = query.handler;
