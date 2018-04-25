@@ -55,11 +55,11 @@ export class ApiService<T> {
     }
 
     public update(entity: Partial<T>): void {
-        this.dispatch('update', { id: this.getKey(entity) });
+        this.dispatch('put', { id: this.getKey(entity) });
     }
 
     public delete(key: IdType | T): void {
-        this.dispatch('delete', { id: this.getKey(key) });
+        this.dispatch('remove', { id: this.getKey(key) });
     }
 
     /** Get key from entity (unless arg is already a key) */

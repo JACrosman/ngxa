@@ -36,12 +36,13 @@ export class ProjectComponent implements OnInit {
     ngOnInit() { }
 
     select(project: Project) {
-        this.projectService.get(project);
+        this.projectService.delete(project);
+        // this.projectService.get(project);
 
-        this.project$.subscribe((proj) => {
-            if (proj) {
-                this.courseService.query();
-            }
-        });
+        // this.project$.subscribe((proj) => {
+        //     if (proj) {
+        //         this.courseService.query();
+        //     }
+        // });
     }
 }

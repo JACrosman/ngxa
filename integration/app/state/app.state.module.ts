@@ -17,10 +17,9 @@ import { CourseApiState, CourseApiService } from './course.state';
             maxAge: 25
         }),
         NgxaModule.forRoot({
-            project: ProjectApiState
         }),
-        NgxaModule.forFeature('course', {
-            course: CourseApiState
+        NgxaModule.forFeature('project', {
+            project: ProjectApiState,
         })
     ],
     providers: [

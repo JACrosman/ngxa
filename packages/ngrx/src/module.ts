@@ -1,5 +1,5 @@
 import { NgModule, ModuleWithProviders, InjectionToken, Inject, Optional, Injector } from '@angular/core';
-import { Store, ReducerManager } from '@ngrx/store';
+import { Store, ReducerManager, StoreModule } from '@ngrx/store';
 import { HttpClient } from '@angular/common/http';
 
 import { NgrxSelect } from './select';
@@ -9,28 +9,20 @@ export const STATE_TOKEN = new InjectionToken<any>('STATE_TOKEN');
 export const FEATURE_STATE_TOKEN = new InjectionToken<any>('FEATURE_STATE_TOKEN');
 
 /**
- * Root module
- * @ignore
- */
-@NgModule()
-export class NgxaRootModule {
-  constructor() {
-  }
-}
-
-/**
  * Ngxa Module
  */
-@NgModule({})
+@NgModule({
+  imports: [StoreModule],
+  providers: [NgrxSelect]
+})
 export class NgxaModule {
   /**
    * Root module factory
    */
   static forRoot(reducers: any): ModuleWithProviders {
     return {
-      ngModule: NgxaRootModule,
+      ngModule: NgxaModule,
       providers: [
-        NgrxSelect,
         {
           provide: STATE_TOKEN,
           useValue: reducers
@@ -44,7 +36,7 @@ export class NgxaModule {
    */
   static forFeature(key: any, reducers?: any): ModuleWithProviders {
     return {
-      ngModule: NgxaRootModule,
+      ngModule: NgxaModule,
       providers: [
         {
           provide: FEATURE_STATE_TOKEN,
