@@ -55,7 +55,7 @@ export class ApiService<T> {
     }
 
     public update(entity: Partial<T>): void {
-        this.dispatch('put', { id: this.getKey(entity) });
+        this.dispatch('put', { id: this.getKey(entity) }, entity);
     }
 
     public delete(key: IdType | T): void {

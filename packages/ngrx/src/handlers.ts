@@ -119,7 +119,9 @@ export const put = {
         path: '/:id',
         method: 'PUT',
     },
-    handler: function() {
+    handler: function(idSelector: IdSelector<any>) {
+        const toUpdate = toUpdateFactory(idSelector);
+
         return {
             request: (info: ApiRequestHandler): Observable<any> => {
                 const res = responseHandler(info);
@@ -129,7 +131,8 @@ export const put = {
                 return state;
             },
             success: (state, action, adapter: EntityAdapter<any>) => {
-                return adapter.upsertOne(action.payload, state);
+                const upsert = action.payload && toUpdate(action.payload);
+                return upsert ? adapter.upsertOne(upsert, state) : state;
             },
             failure: (state, action) => {
                 return {
